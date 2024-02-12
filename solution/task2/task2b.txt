@@ -1,0 +1,33 @@
+WITH MonthlyClicks AS (
+    SELECT
+        _name,
+        EXTRACT(MONTH FROM _day::date) AS _month,
+        EXTRACT(YEAR FROM _day::date) AS _year,
+        SUM(_clicks) AS user_clicks
+    FROM
+        websitestatisticsdatafullyear
+   GROUP BY
+        _name, _month, _year
+), TotalMonthlyClicks AS (
+    SELECT
+        _month,
+        _year,
+        SUM(user_clicks) AS total_clicks
+      FROM
+        MonthlyClicks
+     GROUP BY
+        _month, _year
+)
+SELECT
+    mc._name AS "name",
+    mc._month AS "month",
+    mc._year AS "year",
+    mc.user_clicks AS "clicks per month",
+    tmc.total_clicks AS "total clicks",
+    ROUND((mc.user_clicks::NUMERIC / tmc.total_clicks) * 100, 2) AS "share of clicks in %"
+  FROM
+    MonthlyClicks mc
+  JOIN
+    TotalMonthlyClicks tmc ON mc._month = tmc._month AND mc._year = tmc._year
+ ORDER BY
+    mc._year, mc._month, mc._name;

@@ -1,0 +1,6 @@
+SELECT SUM(_clicks) AS "clicks",
+       _name AS "name",
+       EXTRACT(MONTH FROM _day::date) AS _month
+  FROM WebsiteStatisticsDataFullYear
+ GROUP BY _name, _month
+ ORDER BY _month;
