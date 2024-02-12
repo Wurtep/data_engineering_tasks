@@ -5,7 +5,7 @@ WITH MonthlyClicks AS (
         EXTRACT(YEAR FROM _day::date) AS _year,
         SUM(_clicks) AS user_clicks
     FROM
-        websitestatisticsdatafullyear
+        WebsiteStatisticsDataFullYear
    GROUP BY
         _name, _month, _year
 ), TotalMonthlyClicks AS (
